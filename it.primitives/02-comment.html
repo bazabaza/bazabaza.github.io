@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Please come ment</title>
+    <script src="https://yastatic.net/jquery/1.8.3/jquery.js"></script>
+    <script src="https://raw.githubusercontent.com/bazabaza/bazart/master/js/bazart-0.1.js"></script>
+    <script src="../js/bazart-0.1.js"></script>
+    <script>
+        var counter = 0;
+        var doc_ready_counter = 0;
+
+        $(document).ready(function() {
+            if (BAZART.artObject) {
+                return;
+            }
+
+            window.scrollTo(0, 1);
+
+            var ratio = {x: 160, y: 100};
+            BAZART.init(ratio, false);
+
+            draw();
+        });
+
+
+        function drawTextFieldBorder(ctx, p, w, h) {
+            ctx.strokeRect(p * 10.5, p * 10.5, w - p * 10.5 * 2, h - p * 10.5 * 2);
+        }
+
+        function draw() {
+            var w = BAZART.artObject.width(),
+                h = BAZART.artObject.height(),
+                p = BAZART.canvas.pixelSize,
+                ctx = BAZART.ctx;
+
+            ctx.lineWidth = p;
+            drawTextFieldBorder(ctx, p, w, h);
+
+            function drawCursor() {
+                ctx.beginPath();
+                ctx.moveTo(p * 20.5, p * 19);
+                ctx.lineTo(p * 20.5, p * (19 + 18));
+
+                ctx.moveTo(p * 20.5, p * (19 + 13));
+                ctx.lineTo(p * 25.5, p * (19 + 13));
+                ctx.stroke();
+            }
+
+            function hideCursor() {
+                ctx.save();
+                ctx.fillStyle = 'rgb(255,255,255)';
+                ctx.fillRect(p * 18, p * 17, p * 10, p * 22);
+                ctx.restore();
+            }
+
+            var cursorVisible = false;
+            var refresher = function () {
+                if (cursorVisible) {
+                    hideCursor();
+                } else {
+                    drawCursor();
+                }
+                cursorVisible = !cursorVisible;
+
+                setTimeout(refresher, 530);
+            };
+
+            refresher();
+        }
+    </script>
+    <style type="text/css">
+        body {
+            height: 100%;
+            margin: 0px;
+        }
+        canvas { border: 0px; }
+    </style>
+</head>
+
+<body>
+<canvas id="art-object"></canvas>
+</body>
+
+</html>
