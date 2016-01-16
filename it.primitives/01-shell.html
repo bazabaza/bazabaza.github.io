@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>SH O SH</title>
+    <script src="https://yastatic.net/jquery/1.8.3/jquery.js"></script>
+    <script src="https://raw.githubusercontent.com/bazabaza/bazart/master/js/bazart-0.1.js"></script>
+    <script src="../js/bazart-0.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            if (BAZART.artObject) {
+                return;
+            }
+
+            var ratio = {x: 34, y: 22};
+            BAZART.init(ratio, false);
+
+            draw();
+        });
+
+        function cursor() {
+            var pointTime = 500;
+            var dashTime = pointTime * 3;
+            var betweenCharsTime = pointTime * 3;
+            var betweenPointsOrDashesTime = pointTime;
+            var betweenSignalsTime = 3000;
+
+            var o = {
+                ratio: BAZART.canvas.ratio,
+                signal: [
+                    pointTime, betweenPointsOrDashesTime, pointTime, betweenPointsOrDashesTime, pointTime, betweenCharsTime,
+                    dashTime, betweenPointsOrDashesTime, dashTime, betweenPointsOrDashesTime, dashTime, betweenCharsTime,
+                    pointTime, betweenPointsOrDashesTime, pointTime, betweenPointsOrDashesTime, pointTime,
+                    betweenSignalsTime],
+                currSignalPos: 0,
+                currColor: 'rgb(0,0,0)',
+                w: BAZART.artObject.width(),
+                h: BAZART.artObject.height()
+            };
+
+
+            o.draw = function(self) {
+                var enlarger;
+
+                if (self == undefined) {
+                    self = this;
+                }
+
+                BAZART.ctx.fillStyle = self.currColor;
+                if (self.currColor == 'rgb(255,255,255)') {
+                    enlarger = 10;
+                } else {
+                    enlarger = 0;
+                }
+                BAZART.ctx.fillRect(
+                        ((self.ratio.x - 13) * self.w / self.ratio.x) - enlarger,
+                        (2 * self.h / self.ratio.y) - enlarger,
+                        (9 * self.w / self.ratio.x) + enlarger * 2,
+                        (18 * self.h / self.ratio.y) + enlarger * 2);
+
+                if (self.currSignalPos >= self.signal.length) {
+                    self.currSignalPos = 0;
+                }
+                if (self.currColor == 'rgb(0,0,0)') {
+                    self.currColor = 'rgb(255,255,255)';
+                } else {
+                    self.currColor = 'rgb(0,0,0)';
+                }
+                setTimeout(self.draw, self.signal[self.currSignalPos], self);
+                self.currSignalPos++;
+            };
+
+            return o;
+        }
+
+        function draw$() {
+            var w = BAZART.artObject.width(),
+                h = BAZART.artObject.height();
+
+            BAZART.ctx.font = h * 0.83 + "px monospace";
+            BAZART.ctx.fillText("$", 1.8 * w / BAZART.canvas.ratio.x,
+                    (BAZART.canvas.ratio.y - 4.2) * h / BAZART.canvas.ratio.y);
+        }
+
+        function drawCursor() {
+            var c = cursor();
+            c.draw();
+        }
+
+        function draw() {
+            draw$();
+            drawCursor();
+        }
+    </script>
+    <style type="text/css">
+        body {
+            height: 100%;
+            margin: 0px;
+        }
+        canvas { border: 0px; }
+    </style>
+</head>
+
+<body>
+<canvas id="art-object"></canvas>
+</body>
+
+</html>
