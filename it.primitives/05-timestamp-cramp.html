@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>timecramp</title>
+    <script src="https://yastatic.net/jquery/1.8.3/jquery.min.js"></script>
+    <script src="https://raw.githubusercontent.com/bazabaza/bazart/master/js/bazart-0.1.js"></script>
+    <script src="../js/bazart-0.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            if (BAZART.artObject) {
+                return;
+            }
+
+            var ratio = {x: 160, y: 90};
+            BAZART.init(ratio, false);
+
+            draw();
+        });
+
+        function drawTimestampBox(ctx, p, proportion, up, upWhite) {
+            var fontSizeRatio = 6.6 / 5;
+            var widthScale = 0.2235;
+
+            var realFontSize = BAZART.canvas.ratio.y  * p;
+            ctx.font = (realFontSize * fontSizeRatio) + "px Monaco";
+            var timestamp = Date.now().toString();
+            timestamp = timestamp.substring(0, timestamp.length - 3);
+
+            ctx.save();
+
+            var yPosition;
+            if (up) {
+                ctx.scale(widthScale, 1);
+                yPosition = (BAZART.canvas.ratio.y * proportion) * p;
+                if (!upWhite) {
+                    ctx.fillRect(
+                        0, 0, (BAZART.canvas.ratio.x / widthScale) * p, (BAZART.canvas.ratio.y * proportion) * p);
+                    ctx.fillStyle = 'rgb(255,255,255)';
+                }
+            } else {
+                ctx.scale(widthScale, proportion);
+                yPosition = (BAZART.canvas.ratio.y / proportion) * p;
+                if (upWhite) {
+                    ctx.fillRect(
+                        0, (BAZART.canvas.ratio.y / proportion - BAZART.canvas.ratio.y) * p,
+                        (BAZART.canvas.ratio.x / widthScale) * p,
+                        (yPosition - (BAZART.canvas.ratio.y / proportion - BAZART.canvas.ratio.y)) * p);
+                    ctx.fillStyle = 'rgb(255,255,255)';
+                }
+            }
+
+            ctx.fillText(timestamp, 0, yPosition);
+
+            ctx.restore();
+
+        }
+
+        function drawBothTimestampBoxes(ctx, p) {
+
+            var startTimestamp = Date.now();
+            var cycleTime = 5000;
+
+            function _calcProportion(reminderTime) {
+                var stumblingBlockTime = 3500;
+                var leftScale = Math.pow(stumblingBlockTime, 4);
+                var rightScale = Math.pow((cycleTime - stumblingBlockTime), 2);
+
+                if (reminderTime <= stumblingBlockTime) {
+                    return 0.75 * (Math.pow(reminderTime, 4) / leftScale);
+                } else {
+                    return 0.75 + 0.25 * (Math.pow(reminderTime - stumblingBlockTime, 2) / rightScale);
+                }
+
+            }
+
+            function _redraw() {
+                var currTimestamp = Date.now();
+                var diffTime = currTimestamp - startTimestamp;
+                var remainderTime = diffTime % cycleTime;
+                var blackOrder = Math.floor(diffTime / cycleTime) % 2 == 0;
+                //var proportion = remainderTime / cycleTime;
+                var proportion = _calcProportion(remainderTime);
+
+                ctx.save();
+                ctx.fillStyle = 'rgb(255,255,255)';
+                ctx.fillRect(0, 0, BAZART.canvas.ratio.x * p, BAZART.canvas.ratio.y * p);
+                ctx.restore();
+
+                drawTimestampBox(ctx, p, 1 - proportion, false, blackOrder);
+                drawTimestampBox(ctx, p, proportion, true, blackOrder);
+//                drawTimestampBox(ctx, p, 0.5, false, blackOrder);
+//                drawTimestampBox(ctx, p, 0.5, true, blackOrder);
+
+                requestAnimationFrame(_redraw);
+            }
+
+            requestAnimationFrame(_redraw);
+
+        }
+
+        function draw() {
+            var w = BAZART.artObject.width(),
+                h = BAZART.artObject.height(),
+                p = BAZART.canvas.pixelSize,
+                ctx = BAZART.ctx;
+
+            //drawLamp(ctx, p);
+            //drawTimestamp(ctx, p);
+            drawBothTimestampBoxes(ctx, p);
+        }
+    </script>
+    <style type="text/css">
+        body {
+            height: 100%;
+            margin: 0px;
+        }
+        canvas { border: 0px; }
+    </style>
+</head>
+
+<body>
+<canvas id="art-object"></canvas>
+</body>
+
+</html>

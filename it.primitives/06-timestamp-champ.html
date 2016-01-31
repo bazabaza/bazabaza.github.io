@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>timechamp</title>
+    <script src="https://yastatic.net/jquery/1.8.3/jquery.min.js"></script>
+    <script src="https://raw.githubusercontent.com/bazabaza/bazart/master/js/bazart-0.1.js"></script>
+    <script src="../js/bazart-0.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            if (BAZART.artObject) {
+                return;
+            }
+
+            var ratio = {x: 100, y: 62};
+            BAZART.init(ratio, false);
+
+            draw();
+        });
+
+        function drawPedestal(ctx, p) {
+            ctx.beginPath();
+            ctx.moveTo(6 * p, 31 * p);
+            ctx.lineTo(36 * p, 31 * p);
+            ctx.lineTo(36 * p, 22 * p);
+            ctx.lineTo(63 * p, 22 * p);
+            ctx.lineTo(63 * p, 38 * p);
+            ctx.lineTo(91 * p, 38 * p);
+            ctx.lineTo(91 * p, 51 * p);
+            ctx.lineTo(6 * p, 51 * p);
+            ctx.lineTo(6 * p, 30.5 * p);
+            ctx.stroke();
+        }
+
+        function drawTimestamps(ctx, p) {
+            ctx.save();
+
+            var timestamp1 = Date.now().toString();
+            timestamp1 = timestamp1.substring(0, timestamp1.length - 3);
+
+            var timestamp2 = (Date.now() + 1000).toString();
+            timestamp2 = timestamp2.substring(0, timestamp2.length - 3);
+
+            var timestamp3 = (Date.now() + 2000).toString();
+            timestamp3 = timestamp3.substring(0, timestamp3.length - 3);
+
+            ctx.font = 4 * p + "px Monaco";
+            ctx.fillText(timestamp1, 37.5 * p, 29 * p);
+            ctx.fillText(timestamp2, 10 * p, 38 * p);
+            ctx.fillText(timestamp3, 65 * p, 45 * p);
+
+            ctx.restore();
+
+        }
+
+        function refresh(ctx, p) {
+            ctx.save();
+            ctx.fillStyle = 'rgb(255,255,255)';
+            ctx.fillRect(0, 0, 100 * p, 62 * p);
+            ctx.restore();
+
+            drawPedestal(ctx, p);
+            drawTimestamps(ctx, p);
+
+            setTimeout(refresh, 1000, ctx, p);
+        }
+
+        function draw() {
+            var w = BAZART.artObject.width(),
+                h = BAZART.artObject.height(),
+                p = BAZART.canvas.pixelSize,
+                ctx = BAZART.ctx;
+
+            ctx.lineWidth = p;
+
+            refresh(ctx, p);
+        }
+    </script>
+    <style type="text/css">
+        body {
+            height: 100%;
+            margin: 0px;
+        }
+        canvas { border: 0px; }
+    </style>
+</head>
+
+<body>
+<canvas id="art-object"></canvas>
+</body>
+
+</html>

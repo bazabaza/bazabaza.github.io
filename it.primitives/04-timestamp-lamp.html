@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>timelamp</title>
+    <script src="https://yastatic.net/jquery/1.8.3/jquery.min.js"></script>
+    <script src="https://raw.githubusercontent.com/bazabaza/bazart/master/js/bazart-0.1.js"></script>
+    <script src="../js/bazart-0.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            if (BAZART.artObject) {
+                return;
+            }
+
+            var ratio = {x: 260, y: 169};
+            BAZART.init(ratio, false);
+
+            draw();
+        });
+
+        function makeClipMask(ctx, p, textHeight) {
+            ctx.moveTo(2 * p, textHeight * 0.25 * p);
+            ctx.lineWidth = p;
+            ctx.lineTo(130 * p, 1 * p);
+            ctx.lineTo(130 * p, (textHeight - 1) * p);
+            ctx.lineTo(2 * p, textHeight * 0.75 * p);
+            ctx.lineTo(2 * p, textHeight * 0.25 * p);
+            ctx.clip();
+        }
+
+        function cleanPlaceForTimestamp(ctx, p, textHeight) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(2 * p, 1 * p);
+            ctx.lineWidth = p;
+            ctx.fillStyle = 'rgb(255,255,255)';
+            ctx.fillRect(2 * p, 1 * p, 130 * p, textHeight * p);
+
+            ctx.restore();
+        }
+
+        function drawTimestamp(ctx, p) {
+            var fontSizeRatio = 8 / 5,
+                heightScale = 6,
+                textHeight = 100;
+
+
+            ctx.save();
+            ctx.translate(184 * p, 30 * p);
+            ctx.rotate(Math.PI / 2.55);
+            cleanPlaceForTimestamp(ctx, p, textHeight);
+            makeClipMask(ctx, p, textHeight);
+
+            ctx.font = (textHeight / heightScale) * fontSizeRatio * p + "px monospace";
+            ctx.scale(0.68, heightScale);
+            var timestamp = Date.now().toString();
+            timestamp = timestamp.substring(0, timestamp.length - 3);
+
+            ctx.fillText(timestamp, 2 * p, (textHeight / heightScale) * p);
+            ctx.restore();
+
+            setTimeout(drawTimestamp, 1000, ctx, p);
+
+        }
+
+        function drawLamp(ctx, p) {
+            ctx.save();
+
+            // base
+            ctx.lineWidth = p;
+            ctx.beginPath();
+            ctx.moveTo(39 * p, 160 * p);
+            //ctx.lineTo(85 * p, 160 * p);
+            ctx.quadraticCurveTo(62 * p, 145 * p, 85 * p, 160 * p);
+            ctx.fill();
+
+            ctx.lineWidth = 3 * p;
+            ctx.beginPath();
+            // leg
+            ctx.moveTo(62 * p, 27 * p);
+            ctx.lineTo(62 * p, 154 * p);
+            // hand
+            ctx.moveTo(12 * p, 55 * p);
+            ctx.lineTo(138 * p, 15 * p);
+            ctx.stroke();
+
+            ctx.lineWidth = p;
+            ctx.beginPath();
+            ctx.arc(62 * p, 39 * p, 6 * p, 0, Math.PI * 2);
+            ctx.fill();
+
+            // lamp
+            ctx.lineWidth = p;
+            ctx.beginPath();
+            ctx.moveTo(114 * p, 55 * p);
+            //ctx.lineTo(85 * p, 160 * p);
+            ctx.quadraticCurveTo(117 * p, -5 * p, 161 * p, 39 * p);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(125 * p, 17 * p, 6 * p, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function draw() {
+            var w = BAZART.artObject.width(),
+                h = BAZART.artObject.height(),
+                p = BAZART.canvas.pixelSize,
+                ctx = BAZART.ctx;
+
+            drawLamp(ctx, p);
+            drawTimestamp(ctx, p);
+        }
+    </script>
+    <style type="text/css">
+        body {
+            height: 100%;
+            margin: 0px;
+        }
+        canvas { border: 0px; }
+    </style>
+</head>
+
+<body>
+<canvas id="art-object"></canvas>
+</body>
+
+</html>

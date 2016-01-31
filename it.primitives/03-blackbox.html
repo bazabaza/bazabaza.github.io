@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Black pox</title>
+    <script src="https://yastatic.net/jquery/1.8.3/jquery.js"></script>
+    <script src="https://raw.githubusercontent.com/bazabaza/bazart/master/js/bazart-0.1.js"></script>
+    <script src="../js/bazart-0.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            if (BAZART.artObject) {
+                return;
+            }
+
+            var ratio = {x: 100, y: 100};
+            BAZART.init(ratio, false);
+
+            draw();
+        });
+
+
+        function drawBox(ctx, p) {
+            ctx.fillRect(0, 0, 100 * p, 100 * p);
+        }
+
+        function eraseText(ctx, p, textX, textY) {
+            ctx.save();
+            //ctx.strokeStyle = 'rgb(255,255,255)';
+            ctx.fillRect(textX - 1 * p, textY - 7 * p, 30 * p, 10 * p);
+            ctx.restore();
+        }
+
+        function drawMan(ctx, p) {
+            ctx.save();
+            ctx.fillStyle = 'rgb(255,255,255)';
+            ctx.font = 8 * p + "px monospace";
+            var randX = 2 * p + Math.random() * 82 * p,
+                randY = 8 * p + Math.random() * 90 * p;
+
+            ctx.fillText("хуй", randX, randY);
+
+            ctx.restore();
+
+            setTimeout(eraseText, 50, ctx, p, randX, randY);
+            setTimeout(drawMan, 2000 + Math.random() * 8000, ctx, p);
+        }
+
+        function drawWoman(ctx, p) {
+            ctx.save();
+            ctx.fillStyle = 'rgb(255,255,255)';
+            ctx.font = 8 * p + "px monospace";
+            var randX = 2 * p + Math.random() * 73 * p,
+                randY = 8 * p + Math.random() * 90 * p;
+
+            ctx.fillText("пизда", randX, randY);
+
+            ctx.restore();
+
+            setTimeout(eraseText, 50, ctx, p, randX, randY);
+            setTimeout(drawWoman, 2000 + Math.random() * 8000, ctx, p);
+        }
+
+        function draw() {
+            var w = BAZART.artObject.width(),
+                h = BAZART.artObject.height(),
+                p = BAZART.canvas.pixelSize,
+                ctx = BAZART.ctx;
+            
+            drawBox(ctx, p);
+            drawMan(ctx, p);
+            drawWoman(ctx, p);
+        }
+    </script>
+    <style type="text/css">
+        body {
+            height: 100%;
+            margin: 0px;
+        }
+        canvas { border: 0px; }
+    </style>
+</head>
+
+<body>
+<canvas id="art-object"></canvas>
+</body>
+
+</html>
