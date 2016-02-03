@@ -53,10 +53,10 @@
         function cleanPlaceForTimestamp(ctx, p, textHeight) {
             ctx.save();
             ctx.beginPath();
-            ctx.moveTo(2 * p, 1 * p);
-            ctx.lineWidth = p;
+            //ctx.moveTo(2 * p, 1 * p);
+            //ctx.lineWidth = p;
             ctx.fillStyle = 'rgb(255,255,255)';
-            ctx.fillRect(2 * p, 1 * p, 130 * p, textHeight * p);
+            ctx.fillRect(2 * p, -20 * p, 130 * p, (textHeight + 20) * p);
 
             ctx.restore();
         }
