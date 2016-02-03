@@ -25,7 +25,8 @@
 
             ctx.beginPath();
             ctx.moveTo(2 * p, textHeight * 0.25 * p);
-
+            ctx.lineTo(2 * p, -20 * p);
+            ctx.lineTo(130 * p, -20 * p);
             ctx.lineTo(130 * p, -3 * p);
             ctx.lineTo(2 * p, -3 * p);
             ctx.fill();
@@ -47,7 +48,6 @@
             ctx.lineTo(2 * p, textHeight * 0.75 * p);
             ctx.lineTo(2 * p, textHeight * 0.25 * p);
             ctx.fill();
-            //ctx.clip();
         }
 
         function cleanPlaceForTimestamp(ctx, p, textHeight) {
