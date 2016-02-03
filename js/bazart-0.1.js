@@ -89,7 +89,7 @@ BAZART = (function($) {
             if (window.RT) clearTimeout(window.RT);
             window.RT = setTimeout(function() {
                 this.location.reload(false);
-            }, 1000g);
+            }, 1000);
         });
     };
 
