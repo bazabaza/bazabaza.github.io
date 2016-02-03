@@ -20,8 +20,7 @@
 
         function makeClipMask(ctx, p, textHeight) {
             ctx.save();
-            //ctx.fillStyle = 'rgb(255,255,255)';
-            ctx.fillStyle = 'rgb(0,0,0)';
+            ctx.fillStyle = 'rgb(255,255,255)';
             ctx.lineWidth = 1;
 
             ctx.beginPath();
@@ -30,7 +29,7 @@
             ctx.lineTo(130 * p, -20 * p);
             ctx.lineTo(130 * p, -3 * p);
             ctx.lineTo(2 * p, textHeight * 0.25 * p);
-            ctx.stroke();
+            ctx.fill();
 
             ctx.beginPath();
             ctx.moveTo(2 * p, textHeight * 0.75 * p);
