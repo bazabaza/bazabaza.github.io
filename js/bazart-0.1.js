@@ -66,7 +66,7 @@ BAZART = (function($) {
         this.ctx.save();
         this.ctx.fillStyle = 'rgb(255,255,255)';
         this.ctx.fillRect(0, (this.canvas.ratio.y - 20) * p, this.canvas.ratio.x * p, 20 * p);
-        this.ctx.restore()
+        this.ctx.restore();
 
         this.ctx.save();
         ctx.font = 25 + "px monospace";
@@ -85,14 +85,12 @@ BAZART = (function($) {
         this._initCanvas();
         this.canvas.pixelSize = this.artObject.width() / this.canvas.ratio.x;
 
-        /*
         $(window).resize(function() {
             if (window.RT) clearTimeout(window.RT);
             window.RT = setTimeout(function() {
                 this.location.reload(false);
             }, 100);
         });
-        */
     };
 
     return m;
