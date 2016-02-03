@@ -19,13 +19,35 @@
         });
 
         function makeClipMask(ctx, p, textHeight) {
+            ctx.save();
+            ctx.fillStyle = 'rgb(255,255,255)';
+            ctx.lineWidth = 1;
+
+            ctx.beginPath();
             ctx.moveTo(2 * p, textHeight * 0.25 * p);
-            ctx.lineWidth = p;
-            ctx.lineTo(130 * p, 1 * p);
-            ctx.lineTo(130 * p, (textHeight - 1) * p);
+
+            ctx.lineTo(130 * p, -3 * p);
+            ctx.lineTo(2 * p, -3 * p);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(2 * p, textHeight * 0.75 * p);
+
+            ctx.lineTo(130 * p, (textHeight + 4) * p);
+            ctx.lineTo(2 * p, (textHeight + 4) * p);
+            ctx.fill();
+
+            ctx.restore();
+
+            return;
+
+
+            ctx.beginPath();
+            ctx.moveTo(130 * p, (textHeight - 1) * p);
             ctx.lineTo(2 * p, textHeight * 0.75 * p);
             ctx.lineTo(2 * p, textHeight * 0.25 * p);
-            ctx.clip();
+            ctx.fill();
+            //ctx.clip();
         }
 
         function cleanPlaceForTimestamp(ctx, p, textHeight) {
@@ -44,13 +66,12 @@
                 heightScale = 6,
                 textHeight = 100;
 
-
             ctx.save();
             ctx.translate(184 * p, 30 * p);
             ctx.rotate(Math.PI / 2.55);
             cleanPlaceForTimestamp(ctx, p, textHeight);
-            //makeClipMask(ctx, p, textHeight);
 
+            ctx.save();
             ctx.font = (textHeight / heightScale) * fontSizeRatio * p + "px monospace";
             ctx.scale(0.68, heightScale);
             var timestamp = Date.now().toString();
@@ -59,8 +80,10 @@
             ctx.fillText(timestamp, 2 * p, (textHeight / heightScale) * p);
             ctx.restore();
 
-            //setTimeout(drawTimestamp, 1000, ctx, p);
+            makeClipMask(ctx, p, textHeight);
+            ctx.restore();
 
+            setTimeout(drawTimestamp, 1000, ctx, p);
         }
 
         function drawLamp(ctx, p) {
@@ -116,7 +139,6 @@
     </script>
     <style type="text/css">
         body {
-            height: 100%;
             margin: 0px;
         }
         canvas { border: 0px; }
