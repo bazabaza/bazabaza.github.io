@@ -17,11 +17,12 @@
 
             var ratio = {x: 160, y: 100};
 
-            setTimeout(function() {
-                BAZART.init(ratio, false);
-
-                draw();
-            }, 2000);
+            BAZART.init(ratio, false, draw);
+//            setTimeout(function() {
+//                BAZART.init(ratio, false);
+//
+//                draw();
+//            }, 2000);
         });
 
 

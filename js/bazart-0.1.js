@@ -1,6 +1,6 @@
 /**
  * Created by baza on 20/12/15.
- * build 1
+ * build 2
  */
 
 
@@ -75,25 +75,29 @@ BAZART = (function($) {
         this.ctx.restore();
     };
 
-    m.init = function(canvasRatio, debug) {
-        this.canvas.ratio = canvasRatio;
-
-        this.debug = debug == undefined ? false : debug;
-        this.artObject = $("#art-object");
-        this.ctx = document.getElementById('art-object').getContext('2d');
-
-        this._patchJQuery();
-        this._initCanvas();
-        this.canvas.pixelSize = this.artObject.width() / this.canvas.ratio.x;
-
+    m.init = function(canvasRatio, debug, mainFunc) {
         setTimeout(function() {
-            $(window).resize(function() {
+            this.canvas.ratio = canvasRatio;
+
+            this.debug = debug == undefined ? false : debug;
+            this.artObject = $("#art-object");
+            this.ctx = document.getElementById('art-object').getContext('2d');
+
+            this._patchJQuery();
+            this._initCanvas();
+            this.canvas.pixelSize = this.artObject.width() / this.canvas.ratio.x;
+
+            //setTimeout(function() {
+            $(window).resize(function () {
                 if (window.RT) clearTimeout(window.RT);
-                window.RT = setTimeout(function() {
+                window.RT = setTimeout(function () {
                     this.location.reload(false);
                 }, 1000);
             });
-        }, 1000)
+            //}, 1000);
+
+            mainFunc();
+        }, 2000);
     };
 
     return m;
