@@ -1,6 +1,6 @@
 /**
  * Created by baza on 20/12/15.
- * build 2
+ * build 3
  */
 
 
@@ -77,15 +77,15 @@ BAZART = (function($) {
 
     m.init = function(canvasRatio, debug, mainFunc) {
         setTimeout(function() {
-            this.canvas.ratio = canvasRatio;
+            m.canvas.ratio = canvasRatio;
 
-            this.debug = debug == undefined ? false : debug;
-            this.artObject = $("#art-object");
-            this.ctx = document.getElementById('art-object').getContext('2d');
+            m.debug = debug == undefined ? false : debug;
+            m.artObject = $("#art-object");
+            m.ctx = document.getElementById('art-object').getContext('2d');
 
-            this._patchJQuery();
-            this._initCanvas();
-            this.canvas.pixelSize = this.artObject.width() / this.canvas.ratio.x;
+            m._patchJQuery();
+            m._initCanvas();
+            m.canvas.pixelSize = m.artObject.width() / m.canvas.ratio.x;
 
             //setTimeout(function() {
             $(window).resize(function () {
