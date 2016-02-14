@@ -13,9 +13,7 @@
             }
 
             var ratio = {x: 160, y: 90};
-            BAZART.init(ratio, false);
-
-            draw();
+            BAZART.init(ratio, false, draw);
         });
 
         function drawTimestampBox(ctx, p, proportion, up, upWhite) {

@@ -87,14 +87,12 @@ BAZART = (function($) {
             m._initCanvas();
             m.canvas.pixelSize = m.artObject.width() / m.canvas.ratio.x;
 
-            //setTimeout(function() {
             $(window).resize(function () {
                 if (window.RT) clearTimeout(window.RT);
                 window.RT = setTimeout(function () {
                     this.location.reload(false);
                 }, 1000);
             });
-            //}, 1000);
 
             mainFunc();
         }, 2000);
