@@ -85,12 +85,14 @@ BAZART = (function($) {
         this._initCanvas();
         this.canvas.pixelSize = this.artObject.width() / this.canvas.ratio.x;
 
-        $(window).resize(function() {
-            if (window.RT) clearTimeout(window.RT);
-            window.RT = setTimeout(function() {
-                this.location.reload(false);
-            }, 1000);
-        });
+        setTimeout(function() {
+            $(window).resize(function() {
+                if (window.RT) clearTimeout(window.RT);
+                window.RT = setTimeout(function() {
+                    this.location.reload(false);
+                }, 1000);
+            });
+        }, 1000)
     };
 
     return m;
